@@ -6,33 +6,17 @@ on:
   pull_request:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  lint:
+    uses: ./.github/workflows/setup.yml
 
     steps:
-      # 1. Checkout code
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      # 2. Setup Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-
-      # 3. Enable pnpm
-      - name: Enable pnpm
-        run: corepack enable
-
-      # 4. Install dependencies
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      # 5. Lint
       - name: Lint
         run: pnpm turbo lint --filter=web
 
-      # 6. Build using Turborepo
+  build:
+    needs: typecheck
+    uses: ./.github/workflows/setup.yml
+
+    steps:
       - name: Build
         run: pnpm turbo build --filter=web
