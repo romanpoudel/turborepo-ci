@@ -3,9 +3,7 @@ version: "3"
 services:
   web:
     container_name: web
-    build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
+    image: roman325/turborepo-web:latest
     restart: unless-stopped
     ports:
       - 3000:80
